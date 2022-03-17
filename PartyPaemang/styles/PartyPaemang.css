@@ -1,0 +1,47 @@
+body {
+    background-color: #6869ac;
+}
+
+div#content p, div#content pre {
+    margin: 0 0 0 0;
+    text-align: left;
+}
+
+div#menu ul, div#menu ul li, div#menu ul li a {
+    width: 100px;
+}
+
+div#menu ul {
+    position: fixed;
+    list-style: none;
+    padding-left: 0;
+}
+
+div#menu ul li a {
+    display: block;
+    text-align: center;
+    text-decoration: none;
+    color: #ffabab;
+}
+
+div#menu ul li a:hover {
+    color: black;
+    background-color: #ffabab;
+}
+
+div#content {
+    position: relative;
+    display: inline-block;
+    width: 500px;
+    height: auto;
+    left: 150px;
+    padding: 5px 5px 5px 5px;
+    text-align: center;
+    border: 2px solid #ff6386;
+    background-color: white;
+}
+
+div#content img {
+    border: 3px solid black;
+    margin-bottom: 350px;
+}

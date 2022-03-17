@@ -1,0 +1,63 @@
+body {
+    background: linear-gradient(-45deg, #6869ac, #ef9eff, #6869ac);
+    background-size: 450% 450%;
+    animation: gradient 15s infinite;
+    min-width: 800px;
+}
+
+@keyframes gradient {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+.title {
+    position: relative;
+    display: block;
+    text-align: center;
+    color: white;
+}
+
+p.title {
+    top: -50px;
+}
+
+ul.title li {
+    display: inline-block;
+    margin-right: 50px;
+}
+
+ul.title li a {
+    text-decoration: none;
+    color: white;
+}
+
+ul.title li a:hover {
+    background-color: white;
+    color: black;
+}
+
+h1#titleName {
+    font-size: 56pt;
+}
+
+pre {
+    position: relative;
+    text-align: center;
+    color: #113366
+}
+
+.footer {
+    text-align: center;
+}
+
+a.footer {
+    margin-left: 20px;
+    margin-right: 20px;
+}
