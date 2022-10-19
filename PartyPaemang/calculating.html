@@ -1,0 +1,265 @@
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>산수 연습</title>
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+        }
+
+        div#setting,
+        div#main {
+            position: relative;
+            width: 100%;
+            height: auto;
+            text-align: center;
+        }
+
+        div.content {
+            display: inline-block;
+            text-align: left;
+        }
+
+        div#main div.content div#in_game,
+        div#main div.content div#result {
+            display: none;
+        }
+
+        input.btn {
+            width: 120px;
+            height: 48px;
+            font-size: 18pt;
+            background-color: deepskyblue;
+        }
+
+        input.btn:hover {
+            background-color: black;
+            color: deepskyblue;
+        }
+
+        input.rdBtn {
+            width: 34px;
+            height: 34px;
+        }
+    </style>
+</head>
+
+<body>
+    <!--Setting-->
+    <div id="setting">
+        <div class="content">
+            <input class="rdBtn" id="add" type="radio" name="calc-type" checked="true" value="+" />덧셈
+            <input class="rdBtn" id="subtract" type="radio" name="calc-type" value="-" />뺄셈
+            <input class="rdBtn" id="multiply" type="radio" name="calc-type" value="*" />곱셈
+            <input class="rdBtn" id="divide" type="radio" name="calc-type" value="/" />나눗셈(소수생략)
+            <br /><br /><br />
+            자릿수:&nbsp;<input id="numCount" type="number" max="10" min="1" value="1" autocomplete="off"
+                style="height: 50px; font-size: 18pt;" />
+            <br /><br /><br />
+            <input class="btn" id="set_op" type="button" onclick="setOption()" value="설정 완료" />
+        </div>
+    </div>
+    <!--Main-->
+    <div id="main">
+        <div class="content">
+            <div id="main_screen">
+                <input class="btn" id="start_gm" type="button" onclick="startGm('S')" value="시작하기" />
+            </div>
+            <div id="in_game">
+                <h1 id="question_num" style="text-align: center;"></h1>
+                정답입력:&nbsp;<input id="answer_user" type="text" autocomplete='off'
+                    style="width: 140px; height: 50px; font-size: 16pt;" />
+                <br /><br /><br /><br />
+                <h3 id="collect" style="text-align: center;">0</h3>
+                <h3 style="float: left;">Time:&nbsp;</h3>
+                <h3 id="timer">0.00</h3>
+            </div>
+            <div id="result">
+
+            </div>
+        </div>
+    </div>
+
+    <!--Script-->
+    <script>
+        var calcType = "";
+        var numCnt = 0;
+        var collect = 0;
+        var count = 10;
+
+        var maxNumStr = "";
+        var minNumStr = "";
+
+        var collectNum = 0;
+
+        var timer = 0.00;
+
+        window.onload = function () {
+            setDiv(false);
+        }
+
+        function setOption() {
+            document.getElementsByName('calc-type').forEach(function (type) {
+                if (type.checked == true) {
+                    calcType = type.value;
+                }
+            });
+            numCnt = parseInt(document.getElementById('numCount').value);
+
+            for (i = 0; i < numCnt; i++) {
+                maxNumStr += "9";
+                if (i == 0) {
+                    minNumStr += "1";
+                } else {
+                    minNumStr += "0";
+                }
+            }
+
+            setDiv(true);
+        }
+
+        function startGm(status) {
+            if (status == 'S') {
+                document.getElementById('start_gm').style.display = 'none';
+                document.getElementById('in_game').style.display = 'block';
+                document.getElementById('result').style.display = 'none';
+                createQ();
+            } else if (status == 'O') {
+                document.getElementById('start_gm').style.display = 'block';
+                document.getElementById('in_game').style.display = 'none';
+                document.getElementById('result').style.display = 'none';
+            } else if (status == 'END') {
+                document.getElementById('start_gm').style.display = 'none';
+                document.getElementById('in_game').style.display = 'none';
+                document.getElementById('result').style.display = 'block';
+            }
+        }
+
+        // create quiz.
+        function createQ() {
+            if (count < 1) {
+                endGm();
+                return;
+            } else {
+                count--;
+            }
+            var numA = 0;
+            var numB = 0;
+
+            numA = parseInt(Math.random() * (parseInt(maxNumStr) - parseInt(minNumStr)) + parseInt(minNumStr));
+            numB = parseInt(Math.random() * (parseInt(maxNumStr) - parseInt(minNumStr)) + parseInt(minNumStr));
+
+            var calcName = "";
+
+            switch (calcType) {
+                case "+":
+                    calcName = "+";
+                    collect = numA + numB;
+                    break;
+                case "-":
+                    calcName = "-";
+                    if (numA < numB) {
+                        var temp = numB;
+                        numB = numA;
+                        numA = temp;
+                    }
+                    collect = numA - numB;
+                    break;
+                case "*":
+                    calcName = "X";
+                    collect = numA * numB;
+                    break;
+                case "/":
+                    calcName = "÷";
+                    var tempB = numB.toString().substring(0, numB.toString().length - 1);
+                    numB = parseInt(tempB);
+                    collect = parseInt(numA / numB);
+                    break;
+            }
+            document.getElementById('question_num').innerHTML = numA + " " + calcName + " " + numB;
+            document.getElementById('collect').innerHTML = collectNum;
+            let textBox = document.getElementById('answer_user');
+            textBox.value = "";
+            textBox.focus();
+        }
+
+        // check user's answer.
+        document.getElementById('answer_user').addEventListener('keyup', event => checkAnswer(event));
+
+        function checkAnswer(event) {
+            let key = event.key || event.keyCode;
+
+            if (key === 'Enter' || key === 13) {
+                var answer = document.getElementById('answer_user');
+
+                var answerToNum = parseInt(answer.value);
+                if (isNaN(answerToNum)) {
+                    alert("으잉? 잘못된 입력입니다!!");
+                    answer.focus();
+                    answer.select();
+                    return;
+                }
+
+                var question = document.getElementById('question_num');
+                if (answerToNum == collect) {
+                    question.style.color = 'green';
+                    question.innerHTML += "<br/>COLLECT";
+                    collectNum++;
+                } else {
+                    question.style.color = 'red';
+                    question.innerHTML += "<br/>WRONG";
+                }
+
+                answer.style.visibility = "hidden";
+
+                setTimeout(() => {
+                    question.style.color = 'black';
+                    answer.style.visibility = "visible";
+                    createQ();
+                }, 1000);
+            }
+        }
+
+        function endGm() {
+            startGm('END');
+
+            document.getElementById('result').innerHTML = "<h2>" +
+                "당신은 총 <em style='color:skyblue;'>" + collectNum + "</em>개를 맞추셨습니다!</h2>" +
+                "<br/><br/>" +
+                "<input class='btn' type='button' onclick='replay()' value='다시하기'/>";
+        }
+
+        function replay() {
+            location.reload();
+        }
+
+        var iTimer;
+        var timerUI = document.getElementById('timer');
+        // setting timer.
+        function setTimer(isStart) {
+            if (isStart == true) {
+                iTimer = setInterval(function() {
+                    timer += 0.01;
+                    timerUI.innerHTML = timer;
+                }, 10);
+            }
+            else {
+                clearInterval(iTimer);
+            }
+        }
+
+        function setDiv(isMain) {
+            if (isMain == false) {
+                document.getElementById('main').style.display = 'none';
+                document.getElementById('setting').style.display = 'block';
+            } else {
+                document.getElementById('main').style.display = 'block';
+                document.getElementById('setting').style.display = 'none';
+            }
+        }
+    </script>
+</body>
+
+</html>
