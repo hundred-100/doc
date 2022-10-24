@@ -53,7 +53,7 @@
             <input class="rdBtn" id="add" type="radio" name="calc-type" checked="true" value="+" />덧셈
             <input class="rdBtn" id="subtract" type="radio" name="calc-type" value="-" />뺄셈
             <input class="rdBtn" id="multiply" type="radio" name="calc-type" value="*" />곱셈
-            <input class="rdBtn" id="divide" type="radio" name="calc-type" value="/" />나눗셈(소수생략)
+            <input class="rdBtn" id="divide" type="radio" name="calc-type" value="/" />나눗셈(소수점 아래 생략)
             <br /><br /><br />
             자릿수:&nbsp;<input id="numCount" type="number" max="10" min="1" value="1" autocomplete="off"
                 style="height: 50px; font-size: 18pt;" />
@@ -73,8 +73,8 @@
                     style="width: 140px; height: 50px; font-size: 16pt;" />
                 <br /><br /><br /><br />
                 <h3 id="collect" style="text-align: center;">0</h3>
-                <h3 style="float: left;">Time:&nbsp;</h3>
-                <h3 id="timer">0.00</h3>
+                <h3 style="display: inline-block;">Time:&nbsp;</h3>
+                <h3 id="timer" style="display: inline-block;">0.00</h3>
             </div>
             <div id="result">
 
@@ -126,6 +126,7 @@
                 document.getElementById('in_game').style.display = 'block';
                 document.getElementById('result').style.display = 'none';
                 createQ();
+                setTimer(true);
             } else if (status == 'O') {
                 document.getElementById('start_gm').style.display = 'block';
                 document.getElementById('in_game').style.display = 'none';
@@ -134,6 +135,7 @@
                 document.getElementById('start_gm').style.display = 'none';
                 document.getElementById('in_game').style.display = 'none';
                 document.getElementById('result').style.display = 'block';
+                setTimer(false);
             }
         }
 
@@ -226,7 +228,7 @@
             startGm('END');
 
             document.getElementById('result').innerHTML = "<h2>" +
-                "당신은 총 <em style='color:skyblue;'>" + collectNum + "</em>개를 맞추셨습니다!</h2>" +
+                "당신은 <em style='color:skyblue;'>" + timerUI.innerHTML +  "</em>초 동안, 총 <em style='color:skyblue;'>" + collectNum + "</em>개를 맞추셨습니다!</h2>" +
                 "<br/><br/>" +
                 "<input class='btn' type='button' onclick='replay()' value='다시하기'/>";
         }
@@ -242,7 +244,7 @@
             if (isStart == true) {
                 iTimer = setInterval(function() {
                     timer += 0.01;
-                    timerUI.innerHTML = timer;
+                    timerUI.innerHTML = timer.toFixed(2);
                 }, 10);
             }
             else {
