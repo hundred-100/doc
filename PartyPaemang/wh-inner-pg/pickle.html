@@ -1,0 +1,98 @@
+<html>
+
+<head>
+    <title>pickle</title>
+    <style>
+        body {
+            background: #a4bd70;
+        }
+
+        #pickle {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            left: 50%;
+            top: 50%;
+            margin: -70px 0 0 -50px;
+            backface-visibility: hidden;
+            -webkit-transition: all .08s ease;
+            transition: all .1s ease;
+            text-align: center;
+        }
+
+        #pickle-img {
+            margin: 0 0 0 0;
+            padding: 0 0 0 0;
+            animation: rotate_anim_normal 10s linear infinite;
+        }
+
+        @keyframes rotate_anim_normal {
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes rainbow_body {
+            14% {
+                background-color: red;
+            }
+            28% {
+                background-color: orange;
+            }
+            42% {
+                background-color: yellow;
+            }
+            56% {
+                background-color: green;
+            }
+            70% {
+                background-color: blue;
+            }
+            84% {
+                background-color: darkblue;
+            }
+            98% {
+                background-color: purple;
+            }
+            100% {
+                background-color: red;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="pickle" onclick="clickImg()">
+        <img id="pickle-img" src=".././images/warehouse/pickle.png" width="60" height="150" />
+    </div>
+
+    <script type="text/javascript" src="./jquery-3-6-1.js"></script>
+    <script>
+        var pickle = document.getElementById("pickle");
+        var uncrazy_mod = true;
+
+        window.addEventListener('mouseover', function (e) {
+            pickle.style.left = 0;
+            pickle.style.top = 0;
+        });
+        window.addEventListener('mousemove', function (e) {
+            pickle.style.transform = "translate(" + e.pageX + "px, " + e.pageY + "px)";
+        });
+
+        function clickImg() {
+            var img = document.getElementById("pickle-img");
+            if (uncrazy_mod) {
+                img.style.animation = "rotate_anim_normal .3s linear infinite";
+                document.body.style.animation = "rainbow_body 1s linear infinite";
+                uncrazy_mod = false;
+            } else {
+                img.style.animation = "rotate_anim_normal 10s linear infinite";
+                document.body.style.animation = "none";
+                document.body.style.backgroundColor = "#a4bd70";
+                uncrazy_mod = true;
+            }
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,46 @@
+<html>
+
+<head>
+    <title>You are programmer</title>
+    <style>
+        body {
+            background-color: black;
+            margin: 0 0 0 0;
+            padding: 0 0 0 0;
+        }
+
+        pre {
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <pre id="content"></pre>
+    <iframe id="frmCode" src="useless.txt" onload="LoadFile(this);" style="display: none;"></iframe>
+    <script>
+        var codes = {};
+        var count = 0;
+        var preTag = document.getElementById('content');
+        var strRawContents = null;
+
+        function LoadFile(frm) {
+            strRawContents = frm.contentWindow.document.body.childNodes[0].innerHTML;
+            codes = strRawContents.split(' ');
+        }
+
+        window.onkeydown = function () {
+            if (codes == null || codes.length < 1) return;
+
+            if (count < codes.length) {
+                preTag.innerHTML += codes[count] + " ";
+                count++;
+            } else {
+                count = 0;
+                preTag.innerHTML += codes[count] + " ";
+            }
+        }
+    </script>
+</body>
+
+</html>
