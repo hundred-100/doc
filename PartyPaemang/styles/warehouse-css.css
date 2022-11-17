@@ -1,4 +1,11 @@
+html{
+    overflow: hidden;
+    height: 100%;    
+}
+
 body {
+    overflow: auto;
+    height: 100%;
     margin: 0 0 0 0;
     padding: 0 0 0 0;
     text-align: center;
@@ -107,4 +114,8 @@ div#footer p {
 .aBtn {
     cursor: pointer;
     text-decoration: underline;
+}
+
+img {
+    -webkit-user-drag: none;
 }

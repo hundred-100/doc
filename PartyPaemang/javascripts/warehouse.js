@@ -1,6 +1,7 @@
 /*Variables*/
 var random_evt = 0;
-var all_evt_cnt = 1;
+var all_evt_cnt = 2;
+var windowSize = { width: window.innerWidth || document.body.clientWidth, height: window.innerHeight || document.body.clientHeight };
 
 var c_evt_light_src = [
     './images/warehouse/light_off.png',
@@ -19,9 +20,16 @@ window.onload = function () {
         case 1: // Light ON/OFF
             createCtrlLight(eContent);
             break;
+        case 2: // GGB Spawn
+            createGGB(eContent);
+            break;
         default:
             return;
     }
+}
+
+window.onresize = function () {
+    windowSize = { width: window.innerWidth || document.body.clientWidth, height: window.innerHeight || document.body.clientHeight };
 }
 
 /*Content Event Method*/
@@ -39,6 +47,54 @@ function onCtrlLight(imgCtrl) {
         imgCtrl.src = c_evt_light_src[0];
         c_evt_light_isOn = false;
     }
+}
+
+function createGGB(eContent) {
+    eContent.innerHTML = "<img id='evtImgGGB' src='./images/warehouse/GGB.png' style='position:absolute;' width=128 height=128 onload='animateGGB(this)' />";
+}
+
+var anim;
+var isLeft = false;
+var left = 0;
+function animateGGB(ggb) {
+    ggb.style.top = Math.round(Math.random() * (128 + windowSize.height - 128) - 128) + "px";
+
+    var rndNum = Math.round(Math.random() * (0 + 1) - 0);
+    if (rndNum == 0) {
+        isLeft = true;
+        left = -128;
+    } else {
+        isLeft = false;
+        left = windowSize.width;
+    }
+
+    anim = setInterval(function () {
+        if (ggb === null) {
+            clearInterval(anim);
+            return;
+        }
+
+        if (left < -128 || left > windowSize.width) {
+            ggb.style.top = Math.round(Math.random() * (128 + windowSize.height - 128) - 128) + "px";
+            if (!isLeft) {
+                isLeft = true;
+                left = -128;
+            } else {
+                isLeft = false;
+                left = windowSize.width;
+            }
+        }
+        else {
+            if (isLeft) {
+                left += 1;
+            }
+            else {
+                left -= 1;
+            }
+        }
+
+        ggb.style.left = left + "px";
+    }, 10);
 }
 
 /* On Click Events - 1300 */
@@ -75,7 +131,7 @@ function clickBOO() {
     hand.style.opacity = 1;
 
     count = 0;
-    booAnim = function() {
+    booAnim = function () {
         if (count >= 100) {
             hand.style.width = "100%";
             evtBox.innerHTML += "<img id='BOO-BLOOD' src='./images/warehouse/blood.png' width=0 height=0 />";
@@ -100,7 +156,7 @@ function clickBOO() {
 var booDisappearAnim = null;
 function disappearBOO(evtBox, hand, blood) {
     var cnt = 1.000;
-    booDisappearAnim = function() {
+    booDisappearAnim = function () {
         if (booDisappearAnim == null) {
             cancelAnimationFrame(booDisappearAnim);
             return;

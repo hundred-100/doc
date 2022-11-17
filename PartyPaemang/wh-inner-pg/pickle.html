@@ -70,22 +70,38 @@
     <script>
         var pickle = document.getElementById("pickle");
         var uncrazy_mod = true;
+        var isInitPos = false;
 
         window.addEventListener('mouseover', function (e) {
-            pickle.style.left = 0;
-            pickle.style.top = 0;
+            if (!isInitPos) {
+                pickle.style.left = 0;
+                pickle.style.top = 0;
+                isInitPos = true;
+            }
         });
         window.addEventListener('mousemove', function (e) {
+            if (!isInitPos) {
+                pickle.style.left = 0;
+                pickle.style.top = 0;
+                isInitPos = true;
+            }
             pickle.style.transform = "translate(" + e.pageX + "px, " + e.pageY + "px)";
         });
+
+        var crazyModAudio = new Audio('.././snd/Pickle.mp3');
 
         function clickImg() {
             var img = document.getElementById("pickle-img");
             if (uncrazy_mod) {
+                crazyModAudio.volume = 0.4;
+                crazyModAudio.loop = true;
+                crazyModAudio.load();
+                crazyModAudio.play();
                 img.style.animation = "rotate_anim_normal .3s linear infinite";
                 document.body.style.animation = "rainbow_body 1s linear infinite";
                 uncrazy_mod = false;
             } else {
+                crazyModAudio.pause();
                 img.style.animation = "rotate_anim_normal 10s linear infinite";
                 document.body.style.animation = "none";
                 document.body.style.backgroundColor = "#a4bd70";
