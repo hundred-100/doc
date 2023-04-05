@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>익명 댓글</title>
+	<style>
+		body {
+			text-align: center;
+		}
+
+		.cmtlist {
+			display: inline-block;
+			text-align: left;
+			width: 80%;
+			height: auto;
+			margin-bottom: 400px;
+			opacity: 0.6;
+		}
+
+		.cmtlist p {
+			font-size: x-large;
+			font-weight: bold;
+			border-radius: 8%;
+			background-color: violet;
+		}
+
+		.cmtlist p em {
+			font-style: normal;
+			font-size: medium;
+			color: #454545;
+		}
+
+		.inputcmt {
+			position: fixed;
+			top: 70vh;
+			left: 10%;
+			width: 80%;
+			height: 160px;
+			background-color: white;
+			border: 2px solid black;
+			border-radius: 5%;
+			text-align: center;
+		}
+
+		.inputcmt table {
+			display: inline-block;
+			margin-top: 2%;
+		}
+
+		.inputtxt {
+			width: 418px;
+			height: 48px;
+			border-radius: 5%;
+			resize: none;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="cmtlist">
+		<div class="cmt-tbl">
+			<p>This is Test<br><em>2023.04.05 15:37:12</em></p>
+			<p>This is Test<br><em>2023.04.05 15:37:13</em></p>
+			<p>This is Test<br><em>2023.04.05 15:37:14</em></p>
+			<p>This is Test<br><em>2023.04.05 15:37:12</em></p>
+			<p>This is Test<br><em>2023.04.05 15:37:13</em></p>
+			<p>This is Test<br><em>2023.04.05 15:37:14</em></p>
+			<p>This is Test<br><em>2023.04.05 15:37:12</em></p>
+			<p>This is Test<br><em>2023.04.05 15:37:13</em></p>
+			<p>This is Test<br><em>2023.04.05 15:37:14</em></p>
+			<p>This is Test<br><em>2023.04.05 15:37:12</em></p>
+			<p>This is Test<br><em>2023.04.05 15:37:13</em></p>
+			<p>This is Test<br><em>2023.04.05 15:37:14</em></p>
+			<p>This is Test<br><em>2023.04.05 15:37:12</em></p>
+			<p>This is Test<br><em>2023.04.05 15:37:13</em></p>
+			<p>This is Test<br><em>2023.04.05 15:37:14</em></p>
+		</div>
+	</div>
+	<div class="inputcmt">
+		<table>
+			<tr>
+				<td class="title">글 입력</td>
+				<td colspan="2"><textarea class="inputtxt"></textarea></td>
+			</tr>
+			<tr>
+				<td class="title">비밀번호</td>
+				<td><input type="password" class="inputpw" maxlength="20" /></td>
+				<td class="description">비밀번호는 글 삭제에 필요합니다.</td>
+			</tr>
+			<tr>
+				<td colspan="3"><button class="sendcmt">글쓰기</button></td>
+			</tr>
+		</table>
+	</div>
+
+	<script>
+		const HTTPreq = new XMLHttpRequest();
+		const HTTPurl = "https://jjh0105.cafe24.com/streamer/gguck-comment/gguckAttendanceCtrl.php";
+		var frmDt = new FormData();
+		var pageNumber = 1;
+		var maxNum = 0;
+		
+		const GETcount = "get1count";
+		const GETcomments = "get1comment1page";
+		const POSTcomment = "write1comment";
+
+		HTTPreq.onload = () => {
+			if (HTTPreq.response == "TRUE") {
+				InitHTTP();
+				serverCtrller(GETcomments);
+			} else if (HTTPreq.response == "FALSE") {
+				alert('글 입력을 실패했습니다.');
+			} else if (parseInt(HTTPreq.response, -1) != -1) {
+				maxNum = parseInt(HTTPreq.response);
+			} else {
+				try {
+					let list = document.querySelector('.cmt-tbl');
+					let json = JSON.parse(HTTPreq.response);
+					let indexCount = json.length;
+					for (i=0;i<indexCount;i++) {
+						list.innerHTML += "<p>" + json[i].comment + "<br><em>" + json[i].date + "</em></p>";
+					}
+				} catch (ex) {
+					alert('서버에서 오류를 반환했습니다. ' + ex);
+				}
+			}
+		};
+
+		function serverCtrller(action) {
+			HTTPreq.open("POST", HTTPurl, true);
+			HTTPreq.setRequestHeader('Content-Type', 'multipart/form-data');
+			frmDt.append('action', action);
+			switch (action) {
+				case GETcount:
+					break;
+				case GETcomments:
+					frmDt.append('pgnum', pageNumber);
+					frmDt.append('max', maxNum);
+					frmDt.append('cmtcnt', 20);
+					break;
+				case POSTcomment:
+					let cmt = document.querySelector('.inputtxt');
+					if (cmt.value == null || cmt.value == "") {
+						alert('글을 입력해주세요!');
+						InitHTTP();
+						return;
+					}
+					let pw = document.querySelector('.inputpw');
+					if (pw.value == null || pw.value == "") {
+						alert('비밀번호를 입력해주세요!');
+						InitHTTP();
+						return;
+					}
+					break;
+				default: 
+					InitHTTP();
+					alert('서버 요청 중, 오류가 발생하였습니다.');
+					return;
+			}
+			HTTPreq.send(frmDt);
+		}
+
+		function InitHTTP() {
+			HTTPreq = new XMLHttpRequest();
+			frmDt = new FormData();
+		}
+
+		window.addEventListener('load', function () {
+			document.querySelector('.cmt-tbl').innerHTML = "";
+			serverCtrller(GETcount);
+			setTimeout(() => {
+				serverCtrller(GETcomments);
+			}, 1000);
+		});
+
+		window.addEventListener('scroll', function () {
+			let sHeight = document.body.scrollHeight;
+			if (window.innerHeight + window.scrollY > sHeight) {
+				console.log("Detected Bottom!");
+			}
+		});
+
+		document.querySelector('.sendcmt').addEventListener('click', function() {
+			serverCtrller(POSTcomment);
+		});
+	</script>
+</body>
+
+</html>
