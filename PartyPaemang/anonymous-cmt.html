@@ -106,18 +106,18 @@
 		const GETcomments = "get1comment1page";
 		const POSTcomment = "write1comment";
 
-		HTTPreq.onload = () => {
-			if (HTTPreq.response == "TRUE") {
+		HTTPreq.onreadystatechange = () => {
+			if (HTTPreq.responseText == "TRUE") {
 				InitHTTP();
 				serverCtrller(GETcomments);
-			} else if (HTTPreq.response == "FALSE") {
+			} else if (HTTPreq.responseText == "FALSE") {
 				alert('글 입력을 실패했습니다.');
-			} else if (parseInt(HTTPreq.response, -1) != -1) {
-				maxNum = parseInt(HTTPreq.response);
+			} else if (parseInt(HTTPreq.responseText, -1) != -1) {
+				maxNum = parseInt(HTTPreq.responseText);
 			} else {
 				try {
 					let list = document.querySelector('.cmt-tbl');
-					let json = JSON.parse(HTTPreq.response);
+					let json = JSON.parse(HTTPreq.responseText);
 					let indexCount = json.length;
 					for (i=0;i<indexCount;i++) {
 						list.innerHTML += "<p>" + json[i].comment + "<br><em>" + json[i].date + "</em></p>";
