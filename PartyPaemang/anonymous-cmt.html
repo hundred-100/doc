@@ -130,7 +130,7 @@
 
 		function serverCtrller(action) {
 			HTTPreq.open("POST", HTTPurl, true);
-			HTTPreq.setRequestHeader('Content-Type', 'multipart/form-data');
+			HTTPreq.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 			frmDt.append('action', action);
 			switch (action) {
 				case GETcount:
