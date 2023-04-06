@@ -107,6 +107,7 @@
 		const POSTcomment = "write1comment";
 
 		HTTPreq.onreadystatechange = () => {
+			console.log(HTTPreq.responseText);
 			if (HTTPreq.responseText == "TRUE") {
 				InitHTTP();
 				serverCtrller(GETcomments);
