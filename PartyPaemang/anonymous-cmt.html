@@ -144,6 +144,7 @@
 			frmDt.append('action', action);
 			switch (action) {
 				case GETcount:
+					console.log(GETcount);
 					break;
 				case GETcomments:
 					frmDt.append('pgnum', pageNumber);
@@ -181,6 +182,7 @@
 
 		function InitHTTP() {
 			document.querySelector('.inputtxt').value = null;
+			frmDt = null;
 			frmDt = new FormData();
 		}
 
