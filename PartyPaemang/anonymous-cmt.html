@@ -101,6 +101,7 @@
 		var frmDt = new FormData();
 		var pageNumber = 1;
 		var maxNum = 0;
+		const GETCMTNUM = 20;
 
 		const GETcount = "get1count";
 		const GETcomments = "get1comment1page";
@@ -147,7 +148,7 @@
 				case GETcomments:
 					frmDt.append('pgnum', pageNumber);
 					frmDt.append('max', maxNum);
-					frmDt.append('cmtcnt', 20);
+					frmDt.append('cmtcnt', GETCMTNUM);
 					break;
 				case POSTcomment:
 					let cmt = document.querySelector('.inputtxt');
@@ -179,6 +180,7 @@
 		}
 
 		function InitHTTP() {
+			document.querySelector('.inputtxt').value = null;
 			frmDt = new FormData();
 		}
 
@@ -205,7 +207,14 @@
 		window.addEventListener('scroll', function () {
 			let sHeight = document.body.scrollHeight;
 			if (window.innerHeight + window.scrollY > sHeight) {
-				console.log("Detected Bottom!");
+				//console.log("Detected Bottom!");
+				if (maxNum > (GETCMTNUM * pageNumber)) {
+					pageNumber += 1;
+					serverCtrller(GETcount);
+					setTimeout(function() {
+						serverCtrller(GETcomments);
+					}, 500);
+				}
 			}
 		});
 
