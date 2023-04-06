@@ -111,11 +111,14 @@
 				console.log(HTTPreq.responseText);
 				if (HTTPreq.responseText === "TRUE") {
 					console.log('1');
-					setTimeout(function() {
+					setTimeout(function () {
 						InitHTTP();
-						setTimeout(function() {
+						pageNumber = 1;
+						serverCtrller(GETcount);
+						document.querySelector('.cmt-tbl').innerHTML = "";
+						setTimeout(function () {
 							serverCtrller(GETcomments);
-						}, 100);
+						}, 1000);
 					}, 100);
 				} else if (HTTPreq.responseText === "FALSE") {
 					console.log('2');
@@ -128,7 +131,8 @@
 					console.log(json);
 					let indexCount = json.length;
 					for (i = 0; i < indexCount; i++) {
-						document.querySelector('.cmt-tbl').innerHTML += "<p>" + json[i].comment + "<br><em>" + json[i].date + "</em></p>";
+						document.querySelector('.cmt-tbl').innerHTML += "<p>" + json[i].comment + "<br><em>" + json[i]
+							.date + "</em></p>";
 					}
 				}
 			}
@@ -159,7 +163,9 @@
 						return;
 					}
 					frmDt.append('cmt', cmt.value);
-					frmDt.append('pw', pw.value);
+					sha256(pw.value).then(hash => {
+						frmDt.append('pw', hash);
+					});
 					break;
 				default:
 					InitHTTP();
@@ -173,6 +179,18 @@
 		function InitHTTP() {
 			HTTPreq = new XMLHttpRequest();
 			frmDt = new FormData();
+		}
+
+		async function sha256(message) {
+			const encoder = new TextEncoder();
+			const data = encoder.encode(message);
+
+			const hash = await crypto.subtle.digest('SHA-256', data);
+			const hexHash = Array.from(new Uint8Array(hash))
+				.map(b => b.toString(16).padStart(2, '0'))
+				.join('');
+
+			return hexHash;
 		}
 
 		window.addEventListener('load', function () {
