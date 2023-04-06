@@ -101,33 +101,10 @@
 		var frmDt = new FormData();
 		var pageNumber = 1;
 		var maxNum = 0;
-		
+
 		const GETcount = "get1count";
 		const GETcomments = "get1comment1page";
 		const POSTcomment = "write1comment";
-
-		HTTPreq.onreadystatechange = () => {
-			console.log(HTTPreq.responseText);
-			if (HTTPreq.responseText == "TRUE") {
-				InitHTTP();
-				serverCtrller(GETcomments);
-			} else if (HTTPreq.responseText == "FALSE") {
-				alert('글 입력을 실패했습니다.');
-			} else if (parseInt(HTTPreq.responseText, -1) != -1) {
-				maxNum = parseInt(HTTPreq.responseText);
-			} else {
-				try {
-					let list = document.querySelector('.cmt-tbl');
-					let json = JSON.parse(HTTPreq.responseText);
-					let indexCount = json.length;
-					for (i=0;i<indexCount;i++) {
-						list.innerHTML += "<p>" + json[i].comment + "<br><em>" + json[i].date + "</em></p>";
-					}
-				} catch (ex) {
-					alert('서버에서 오류를 반환했습니다. ' + ex);
-				}
-			}
-		};
 
 		function serverCtrller(action) {
 			HTTPreq.open("POST", HTTPurl, true);
@@ -154,12 +131,38 @@
 						InitHTTP();
 						return;
 					}
+					frmDt.append('cmt', cmt);
+					frmDt.append('pw', pw);
 					break;
-				default: 
+				default:
 					InitHTTP();
 					alert('서버 요청 중, 오류가 발생하였습니다.');
 					return;
 			}
+
+			HTTPreq.onreadystatechange = function() {
+				console.log(HTTPreq.responseText);
+				if (HTTPreq.responseText == "TRUE") {
+					InitHTTP();
+					serverCtrller(GETcomments);
+				} else if (HTTPreq.responseText == "FALSE") {
+					alert('글 입력을 실패했습니다.');
+				} else if (parseInt(HTTPreq.responseText, -1) != -1) {
+					maxNum = parseInt(HTTPreq.responseText);
+				} else {
+					try {
+						let list = document.querySelector('.cmt-tbl');
+						let json = JSON.parse(HTTPreq.responseText);
+						let indexCount = json.length;
+						for (i = 0; i < indexCount; i++) {
+							list.innerHTML += "<p>" + json[i].comment + "<br><em>" + json[i].date + "</em></p>";
+						}
+					} catch (ex) {
+						alert('서버에서 오류를 반환했습니다. ' + ex);
+					}
+				}
+			};
+
 			HTTPreq.send(frmDt);
 		}
 
@@ -183,7 +186,7 @@
 			}
 		});
 
-		document.querySelector('.sendcmt').addEventListener('click', function() {
+		document.querySelector('.sendcmt').addEventListener('click', function () {
 			serverCtrller(POSTcomment);
 		});
 	</script>
