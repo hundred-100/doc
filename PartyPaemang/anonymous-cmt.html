@@ -173,7 +173,9 @@
 					return;
 			}
 
-			HTTPreq.send(frmDt);
+			setTimeout(function() {
+				HTTPreq.send(frmDt);
+			}, 1000);
 		}
 
 		function InitHTTP() {
