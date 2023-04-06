@@ -111,8 +111,12 @@
 				console.log(HTTPreq.responseText);
 				if (HTTPreq.responseText === "TRUE") {
 					console.log('1');
-					InitHTTP();
-					serverCtrller(GETcomments);
+					setTimeout(function() {
+						InitHTTP();
+						setTimeout(function() {
+							serverCtrller(GETcomments);
+						}, 100);
+					}, 100);
 				} else if (HTTPreq.responseText === "FALSE") {
 					console.log('2');
 					alert('글 입력을 실패했습니다.');
@@ -154,8 +158,8 @@
 						InitHTTP();
 						return;
 					}
-					frmDt.append('cmt', cmt);
-					frmDt.append('pw', pw);
+					frmDt.append('cmt', cmt.value);
+					frmDt.append('pw', pw.value);
 					break;
 				default:
 					InitHTTP();
