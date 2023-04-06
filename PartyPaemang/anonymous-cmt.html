@@ -113,11 +113,11 @@
 				if (HTTPreq.responseText === "TRUE") {
 					console.log('1');
 					setTimeout(function () {
-						InitHTTP();
 						pageNumber = 1;
 						serverCtrller(GETcount);
 						document.querySelector('.cmt-tbl').innerHTML = "";
 						setTimeout(function () {
+							InitHTTP();
 							serverCtrller(GETcomments);
 						}, 1000);
 					}, 100);
@@ -136,6 +136,7 @@
 							.date + "</em></p>";
 					}
 				}
+				InitHTTP();
 			}
 		};
 
@@ -182,6 +183,7 @@
 
 		function InitHTTP() {
 			document.querySelector('.inputtxt').value = null;
+			HTTPreq.abort();
 			frmDt = null;
 			frmDt = new FormData();
 		}
