@@ -176,7 +176,6 @@
 						InitHTTPData();
 						return;
 					}
-					InitHTTPData();
 					setTimeout(function () {
 						frmDt.append('cmt', cmt.value);
 						sha256(pw.value).then(hash => {
@@ -269,6 +268,9 @@
 
 		document.querySelector('.sendcmt').addEventListener('click', function () {
 			serverCtrller(POSTcomment);
+			setTimeout(function() {
+				InitHTTPData();
+			}, 1000);
 		});
 	</script>
 </body>
