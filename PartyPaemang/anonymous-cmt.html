@@ -233,12 +233,13 @@
 		window.addEventListener('scroll', function () {
 			let sHeight = document.body.scrollHeight;
 			if (window.innerHeight + window.scrollY > sHeight) {
+				console.log(HTTPreq.readyState);
 				if (commentsLength >= maxNum) return;
 				//console.log("Detected Bottom!");
 				if (maxNum > (GETCMTNUM * pageNumber)) {
 					pageNumber += 1;
 					setTimeout(function () {
-						if (!HTTPreq.DONE) {
+						if (HTTPreq.DONE) {
 							serverCtrller(GETcomments);
 						}
 					}, 100);
