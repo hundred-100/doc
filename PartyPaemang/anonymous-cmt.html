@@ -119,7 +119,7 @@
 						serverCtrller(GETcount);
 						document.querySelector('.cmt-tbl').innerHTML = "";
 						setTimeout(function () {
-							InitHTTP();
+							InitHTTPData();
 							serverCtrller(GETcomments);
 						}, 1000);
 					}, 100);
@@ -178,15 +178,16 @@
 					let cmt = document.querySelector('.inputtxt');
 					if (cmt.value == null || cmt.value == "") {
 						alert('글을 입력해주세요!');
-						InitHTTP();
+						InitHTTPData();
 						return;
 					}
 					let pw = document.querySelector('.inputpw');
 					if (pw.value == null || pw.value == "") {
 						alert('비밀번호를 입력해주세요!');
-						InitHTTP();
+						InitHTTPData();
 						return;
 					}
+					InitHTTPData();
 					setTimeout(function () {
 						frmDt.append('cmt', cmt.value);
 						sha256(pw.value).then(hash => {
@@ -197,20 +198,20 @@
 					}, 20);
 					break;
 				default:
-					InitHTTP();
+					InitHTTPData();
 					alert('서버 요청 중, 오류가 발생하였습니다.');
 					return;
 			}
 
 			if (action != GETcount) {
 				setTimeout(function () {
+					document.querySelector('.inputtxt').value = "";
 					HTTPreq.send(frmDt);
 				}, 1000);
 			}
 		}
 
-		function InitHTTP() {
-			document.querySelector('.inputtxt').value = "";
+		function InitHTTPData() {
 			frmDt = null;
 			frmDt = new FormData();
 		}
