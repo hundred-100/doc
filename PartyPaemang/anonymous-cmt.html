@@ -111,40 +111,25 @@
 
 		HTTPreq.onreadystatechange = function () {
 			if (HTTPreq.readyState === 4 && HTTPreq.status === 200) {
-				// console.log(HTTPreq.responseText);
-				if (HTTPreq.responseText === "TRUE") {
-					// console.log('1');
-					setTimeout(function () {
-						serverCtrller(GETcount);
-						document.querySelector('.cmt-tbl').innerHTML = "";
-						setTimeout(function () {
-							InitHTTPData();
-							serverCtrller(GETcomments);
-						}, 1000);
-					}, 100);
-				} else if (HTTPreq.responseText === "FALSE") {
-					// console.log('2');
-					alert('글 입력을 실패했습니다.');
-				} else {
-					try {
-						let json = JSON.parse(HTTPreq.responseText);
-						// console.log(json);
-						let indexCount = json.length;
-						for (i = 0; i < indexCount; i++) {
-							document.querySelector('.cmt-tbl').innerHTML += "<p>" + json[i].comment + "<br><em>" + json[i]
-								.date + "</em></p>";
-							commentsLength += 1;
-						}
-					} catch (err) {
-						console.log(HTTPreq.responseText);
-						console.log(err);
+
+				try {
+					let json = JSON.parse(HTTPreq.responseText);
+					// console.log(json);
+					let indexCount = json.length;
+					for (i = 0; i < indexCount; i++) {
+						document.querySelector('.cmt-tbl').innerHTML += "<p>" + json[i].comment + "<br><em>" + json[i]
+							.date + "</em></p>";
+						commentsLength += 1;
 					}
+				} catch (err) {
+					console.log(HTTPreq.responseText);
+					console.log(err);
 				}
-				setTimeout(function () {
-					HTTPreq.abort();
-					isLoadingComments = false;
-				}, 1000);
 			}
+			setTimeout(function () {
+				HTTPreq.abort();
+				isLoadingComments = false;
+			}, 1000);
 		};
 
 		function serverCtrller(action) {
@@ -179,7 +164,6 @@
 					break;
 				case POSTcomment:
 					// console.log(POSTcomment);
-					HTTPreq.setRequestHeader('Content-Type', 'application/x-www-form-data-urlencoded');
 					let cmt = document.querySelector('.inputtxt');
 					if (cmt.value == null || cmt.value == "") {
 						alert('글을 입력해주세요!');
@@ -200,6 +184,29 @@
 						});
 						pageNumber = 0;
 						commentsLength = 0;
+						fetch(HTTPurl, {
+								method: 'POST',
+								body: frmDt
+							})
+							.then(response => response.text())
+							.then(resultData => {
+								if (resultData === "TRUE") {
+									// console.log('1');
+									setTimeout(function () {
+										serverCtrller(GETcount);
+										document.querySelector('.cmt-tbl').innerHTML = "";
+										setTimeout(function () {
+											InitHTTPData();
+											serverCtrller(GETcomments);
+										}, 1000);
+									}, 100);
+								} else if (resultData === "FALSE") {
+									// console.log('2');
+									alert('글 입력을 실패했습니다.');
+								} else {
+									console.log(resultData);
+								}
+							})
 					}, 20);
 					break;
 				default:
