@@ -102,6 +102,7 @@
 		var pageNumber = 0;
 		var maxNum = 0;
 		var commentsLength = 0;
+		var isLoadingComments = false;
 		const GETCMTNUM = 20;
 
 		const GETcount = "get1count";
@@ -137,6 +138,7 @@
 				}
 				setTimeout(function () {
 					HTTPreq.abort();
+					isLoadingComments = false;
 				}, 100);
 			}
 		};
@@ -205,7 +207,7 @@
 		}
 
 		function InitHTTP() {
-			document.querySelector('.inputtxt').value = null;
+			document.querySelector('.inputtxt').value = "";
 			frmDt = null;
 			frmDt = new FormData();
 		}
@@ -239,7 +241,8 @@
 				if (maxNum > (GETCMTNUM * pageNumber)) {
 					pageNumber += 1;
 					setTimeout(function () {
-						if (HTTPreq.DONE) {
+						if (!isLoadingComments) {
+							isLoadingComments = true;
 							serverCtrller(GETcomments);
 						}
 					}, 100);
