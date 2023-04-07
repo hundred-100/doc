@@ -126,13 +126,18 @@
 					// console.log('2');
 					alert('글 입력을 실패했습니다.');
 				} else {
-					let json = JSON.parse(HTTPreq.responseText);
-					// console.log(json);
-					let indexCount = json.length;
-					for (i = 0; i < indexCount; i++) {
-						document.querySelector('.cmt-tbl').innerHTML += "<p>" + json[i].comment + "<br><em>" + json[i]
-							.date + "</em></p>";
-						commentsLength += 1;
+					try {
+						let json = JSON.parse(HTTPreq.responseText);
+						// console.log(json);
+						let indexCount = json.length;
+						for (i = 0; i < indexCount; i++) {
+							document.querySelector('.cmt-tbl').innerHTML += "<p>" + json[i].comment + "<br><em>" + json[i]
+								.date + "</em></p>";
+							commentsLength += 1;
+						}
+					} catch (err) {
+						console.log(HTTPreq.responseText);
+						console.log(err);
 					}
 				}
 				setTimeout(function () {
