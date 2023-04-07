@@ -179,7 +179,7 @@
 					break;
 				case POSTcomment:
 					// console.log(POSTcomment);
-					HTTPreq.setRequestHeader('Content-Type', 'multipart/form-data; boundary=<calculated when request is sent>');
+					HTTPreq.setRequestHeader('Content-Type', 'application/x-www-form-data-urlencoded');
 					let cmt = document.querySelector('.inputtxt');
 					if (cmt.value == null || cmt.value == "") {
 						alert('글을 입력해주세요!');
