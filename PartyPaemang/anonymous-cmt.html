@@ -148,10 +148,7 @@
 					console.log(GETcount);
 					fetch(HTTPurl, {
 							method: 'POST',
-							body: frmDt,
-							headers: {
-								'Content-Type': 'multipart/form-data'
-							}
+							body: frmDt
 						})
 						.then(response => response.text())
 						.then(dataTxt => {
