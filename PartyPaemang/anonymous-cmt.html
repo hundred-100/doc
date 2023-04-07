@@ -99,8 +99,9 @@
 		var HTTPreq = new XMLHttpRequest();
 		const HTTPurl = "https://jjh0105.cafe24.com/streamer/gguck-comment/gguckAttendanceCtrl.php";
 		var frmDt = new FormData();
-		var pageNumber = 1;
+		var pageNumber = 0;
 		var maxNum = 0;
+		var commentsLength = 0;
 		const GETCMTNUM = 20;
 
 		const GETcount = "get1count";
@@ -131,6 +132,7 @@
 					for (i = 0; i < indexCount; i++) {
 						document.querySelector('.cmt-tbl').innerHTML += "<p>" + json[i].comment + "<br><em>" + json[i]
 							.date + "</em></p>";
+						commentsLength += 1;
 					}
 				}
 				setTimeout(function () {
@@ -231,12 +233,13 @@
 		window.addEventListener('scroll', function () {
 			let sHeight = document.body.scrollHeight;
 			if (window.innerHeight + window.scrollY > sHeight) {
+				if (commentsLength >= maxNum) return;
 				//console.log("Detected Bottom!");
 				if (maxNum > (GETCMTNUM * pageNumber)) {
 					pageNumber += 1;
 					setTimeout(function () {
 						serverCtrller(GETcomments);
-					}, 1000);
+					}, 100);
 				}
 			}
 		});
