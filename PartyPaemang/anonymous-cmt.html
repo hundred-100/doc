@@ -144,7 +144,6 @@
 		};
 
 		function serverCtrller(action) {
-			InitHTTP();
 			HTTPreq.open("POST", HTTPurl, true);
 			frmDt.append('action', action);
 			switch (action) {
