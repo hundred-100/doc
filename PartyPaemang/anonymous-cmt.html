@@ -124,9 +124,6 @@
 				} else if (HTTPreq.responseText === "FALSE") {
 					console.log('2');
 					alert('글 입력을 실패했습니다.');
-				} else if (!isNaN(parseInt(HTTPreq.responseText)) && parseInt(HTTPreq.responseText) >= 0) {
-					console.log('3');
-					maxNum = parseInt(HTTPreq.responseText);
 				} else {
 					let json = JSON.parse(HTTPreq.responseText);
 					console.log(json);
@@ -136,7 +133,7 @@
 							.date + "</em></p>";
 					}
 				}
-				setTimeout(function() {
+				setTimeout(function () {
 					HTTPreq.abort();
 				}, 100);
 			}
@@ -149,7 +146,25 @@
 			switch (action) {
 				case GETcount:
 					console.log(GETcount);
-					break;
+					fetch(HTTPurl, {
+							method: 'POST',
+							body: frmDt,
+							headers: {
+								'Content-Type': 'application/x-www-form-urlencoded'
+							}
+						})
+						.then(response => {
+							let getNum = parseInt(response);
+							if (!isNaN(getNum)) {
+								maxNum = getNum;
+							} else {
+								console.log('Failed to parse int Max Number.');
+							}
+						})
+						.catch(error => {
+							console.log('[ERROR] ' + error);
+						});
+					return;
 				case GETcomments:
 					console.log(GETcomments);
 					frmDt.append('pgnum', pageNumber);
@@ -181,9 +196,11 @@
 					return;
 			}
 
-			setTimeout(function() {
-				HTTPreq.send(frmDt);
-			}, 1000);
+			if (action != GETcount) {
+				setTimeout(function () {
+					HTTPreq.send(frmDt);
+				}, 1000);
+			}
 		}
 
 		function InitHTTP() {
@@ -218,7 +235,7 @@
 				//console.log("Detected Bottom!");
 				if (maxNum > (GETCMTNUM * pageNumber)) {
 					pageNumber += 1;
-					setTimeout(function() {
+					setTimeout(function () {
 						serverCtrller(GETcomments);
 					}, 1000);
 				}
