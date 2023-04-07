@@ -136,6 +136,9 @@
 							.date + "</em></p>";
 					}
 				}
+				setTimeout(function() {
+					HTTPreq.abort();
+				}, 100);
 			}
 		};
 
@@ -185,7 +188,6 @@
 
 		function InitHTTP() {
 			document.querySelector('.inputtxt').value = null;
-			HTTPreq.abort();
 			frmDt = null;
 			frmDt = new FormData();
 		}
