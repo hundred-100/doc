@@ -193,6 +193,8 @@
 						sha256(pw.value).then(hash => {
 							frmDt.append('pw', hash);
 						});
+						pageNumber = 0;
+						commentsLength = 0;
 					}, 20);
 					break;
 				default:
