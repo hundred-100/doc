@@ -154,6 +154,7 @@
 							}
 						})
 						.then(response => {
+							console.log(response);
 							let getNum = parseInt(response);
 							if (!isNaN(getNum)) {
 								maxNum = getNum;
