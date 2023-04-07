@@ -255,6 +255,7 @@
 				if (commentsLength >= maxNum) return;
 				//console.log("Detected Bottom!");
 				if (maxNum > (GETCMTNUM * pageNumber)) {
+					HTTPreq.abort();
 					pageNumber += 1;
 					setTimeout(function () {
 						if (!isLoadingComments) {
