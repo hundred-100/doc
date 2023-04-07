@@ -111,9 +111,9 @@
 
 		HTTPreq.onreadystatechange = function () {
 			if (HTTPreq.readyState === 4 && HTTPreq.status === 200) {
-				console.log(HTTPreq.responseText);
+				// console.log(HTTPreq.responseText);
 				if (HTTPreq.responseText === "TRUE") {
-					console.log('1');
+					// console.log('1');
 					setTimeout(function () {
 						pageNumber = 1;
 						serverCtrller(GETcount);
@@ -124,11 +124,11 @@
 						}, 1000);
 					}, 100);
 				} else if (HTTPreq.responseText === "FALSE") {
-					console.log('2');
+					// console.log('2');
 					alert('글 입력을 실패했습니다.');
 				} else {
 					let json = JSON.parse(HTTPreq.responseText);
-					console.log(json);
+					// console.log(json);
 					let indexCount = json.length;
 					for (i = 0; i < indexCount; i++) {
 						document.querySelector('.cmt-tbl').innerHTML += "<p>" + json[i].comment + "<br><em>" + json[i]
@@ -148,7 +148,7 @@
 			frmDt.append('action', action);
 			switch (action) {
 				case GETcount:
-					console.log(GETcount);
+					// console.log(GETcount);
 					fetch(HTTPurl, {
 							method: 'POST',
 							body: frmDt
@@ -168,13 +168,13 @@
 						});
 					return;
 				case GETcomments:
-					console.log(GETcomments);
+					// console.log(GETcomments);
 					frmDt.append('pgnum', pageNumber);
 					frmDt.append('max', maxNum);
 					frmDt.append('cmtcnt', GETCMTNUM);
 					break;
 				case POSTcomment:
-					console.log(POSTcomment);
+					// console.log(POSTcomment);
 					let cmt = document.querySelector('.inputtxt');
 					if (cmt.value == null || cmt.value == "") {
 						alert('글을 입력해주세요!');
@@ -187,10 +187,13 @@
 						InitHTTP();
 						return;
 					}
-					frmDt.append('cmt', cmt.value);
-					sha256(pw.value).then(hash => {
-						frmDt.append('pw', hash);
-					});
+					InitHTTP();
+					setTimeout(function () {
+						frmDt.append('cmt', cmt.value);
+						sha256(pw.value).then(hash => {
+							frmDt.append('pw', hash);
+						});
+					}, 20);
 					break;
 				default:
 					InitHTTP();
@@ -234,7 +237,7 @@
 		window.addEventListener('scroll', function () {
 			let sHeight = document.body.scrollHeight;
 			if (window.innerHeight + window.scrollY > sHeight) {
-				console.log(HTTPreq.readyState);
+				// console.log(HTTPreq.readyState);
 				if (commentsLength >= maxNum) return;
 				//console.log("Detected Bottom!");
 				if (maxNum > (GETCMTNUM * pageNumber)) {
