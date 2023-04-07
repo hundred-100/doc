@@ -238,7 +238,9 @@
 				if (maxNum > (GETCMTNUM * pageNumber)) {
 					pageNumber += 1;
 					setTimeout(function () {
-						serverCtrller(GETcomments);
+						if (!HTTPreq.DONE) {
+							serverCtrller(GETcomments);
+						}
 					}, 100);
 				}
 			}
