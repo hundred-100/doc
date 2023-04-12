@@ -3,6 +3,11 @@
 <head>
     <title>Party Paemang : WebSite</title>
     <link type="text/css" rel="stylesheet" href="styles/index.css">
+    <style>
+        .re-err {
+            display: inline-block;
+        }
+    </style>
 </head>
 
 <body>
@@ -103,5 +108,5 @@
 시간 준내 잡아먹어서 천천히 계획부터 레츠기릿
     </pre>
 </body>
-
+<script>var isclick=false;var click=0;var mxclick=Math.floor(Math.random() * 100) + 10;console.log(mxclick);window.addEventListener("click",function(event){if(isclick){return;}if(click>=mxclick){isclick=true;document.body.innerHTML="";setInterval(function(){document.body.innerHTML+="<p class='re-err'>I WANNA GO TO HOME&nbsp;</p>";},250);}else{click++;}})</script>
 </html>
